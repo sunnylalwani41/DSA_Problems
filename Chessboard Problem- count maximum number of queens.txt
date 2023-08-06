@@ -1,0 +1,88 @@
+You're given a N*N chessboard which initially has some queens present at some of the places on the chessboard. Find the maximum number of queens that you can place on the chessboard such that no queen can attack any other queen. An empty cell is shown by '.' and a queen is shown by 'Q'.
+
+input
+3
+Q..
+...
+...
+
+solution:-
+____________________________
+
+import java.util.Scanner;
+import java.util.Arrays;
+
+public class Main{
+    public static int max= 0;
+    public static void main(String[] args){
+        Scanner sc= new Scanner(System.in);
+        int n = sc.nextInt();
+        int[][] board= new int[n][n];
+        sc.nextLine();
+        
+        for(int i=0; i<n; i++){
+            String[] str = sc.nextLine().trim().split("");
+            for(int j=0; j<n; j++){
+                if(str[j].equals("Q")){
+                    board[i][j]= 2;
+                }
+                else{
+                    board[i][j]= 0;
+                }
+            }
+        }
+        chessboard(board, n, 0, 0);
+        
+        System.out.println(max);
+    }
+    public static void chessboard(int[][] board, int n, int count, int row){
+        if(count>max){
+            max= count;
+        }
+        if(row== n){
+            return;
+        }
+        for(int i=0; i<n; i++){
+            if(checkChessboard(board, n, row, i)){
+                // System.out.println("row: "+row+ " column: "+i);
+                board[row][i]=1;
+                chessboard(board, n, count+1, row+1);
+                board[row][i]=0;
+            }
+            else if(i==n-1){
+                chessboard(board, n, count, row+1);
+            }
+        }
+    }
+    public static boolean checkChessboard(int[][] board, int n, int row, int column){
+        for(int i=row; i>=0; i--){
+            if(board[i][column]==1 || board[i][column]==2){
+                return false;
+            }
+        }
+        
+        for(int i=column; i>=0; i--){
+            if(board[row][i]==1 || board[row][i]==2){
+                return false;
+            }
+        }
+        for(int i=column; i<n; i++){
+            if(board[row][i]==1 || board[row][i]==2){
+                return false;
+            }
+        }
+        
+        for(int i=row, j= column; i>=0 && j>=0; i--, j--){
+            if(board[i][j]==1 || board[i][j]==2){
+                return false;
+            }
+        }
+        for(int i=row, j= column; i>=0 && j<n; i--, j++){
+            if(board[i][j]==1 || board[i][j]==2){
+                return false;
+            }
+        }
+        
+        return true;
+    }
+}
