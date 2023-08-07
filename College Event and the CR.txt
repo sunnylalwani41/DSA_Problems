@@ -1,0 +1,105 @@
+Problem Statement:
+_________________________
+College Event and the CR
+
+
+Himanshu the CR of class wants to spread some news about an event to every group of students of the college.He will have to miss Professor DK classes to spread the news to every student, so he came up with a plan,Instead of meeting every student in person he decided to meet few people such that the person to whom he pass the news will spread it to all his friends in a group.And those friends will pass it to other friends and so on.
+Your task is to find minimum number of persons he need to meet to spread the news of the event.
+
+input:
+______________
+
+First line of input is 't' - Test cases.
+Follwed by N, the number of students in the testcase ( 0 to N-1 ).
+The next line will contain 'e', the number of friend descriptions 'e'.
+The next 'e' lines are the descriptions of type "a b" denoting 'a' friends with 'b'. If 'a' is friends with 'b' then 'b' is friends with 'a'.
+
+2
+4
+2
+0 1
+1 2
+3
+0
+
+Excepted Output
+_________________
+2
+3
+
+
+Output
+________________________
+Output contains t line, the number of people, Himanshu has to meet in person for each test case.
+
+
+Solution:
+____________________________
+
+
+import java.util.Scanner;
+import java.util.Arrays;
+public class Main{
+    static int count =0;
+    public static void main (String[] args){
+        
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        while(t--!=0){
+            int n = sc.nextInt();
+            int k = sc.nextInt();
+            int[][] group = new int[n][n];
+            int[] students = new int[n];
+            
+            for(int i=0; i<k; i++){
+                int a = sc.nextInt();
+                int b = sc.nextInt();
+                if(b<a){
+                    int temp=a;
+                    a= b;
+                    b=temp;
+                }
+                group[a][b]=1;
+                group[b][a]=1;
+            }
+            
+            
+            // boolean flag= true;
+            for(int i=0; i<n; i++){
+                if(students[i]==0){
+                    // if(flag){
+                    //     count++;
+                    // }
+                    // flag = false;
+                    countGroup(group, students, n, i, true);
+                }
+            }
+            // System.out.println(Arrays.toString(students));
+            for(int i=0; i<n; i++){
+                if(students[i]==0){
+                    count++;
+                }
+            }
+            System.out.println(count);
+            count=0;
+        }
+    }
+    public static void countGroup(int[][] group, int[] students, int n, int row, boolean flag){
+        if(row==n){
+            return;
+        }
+        
+        for(int i=0; i<n; i++){
+            if(group[row][i]==1){
+                group[row][i]=0;
+                students[i]=1;
+                // if(students[row]!=1)
+                //     students[row]=2;
+                if(flag){
+                    count++;
+                }
+                countGroup(group, students, n, i, false);
+            }
+        }
+    }
+}
